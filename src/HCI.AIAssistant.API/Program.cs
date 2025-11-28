@@ -41,6 +41,18 @@ builder.Services.AddSingleton<IAppConfigurationsService>(
 builder.Services.AddSingleton<IParametricFunctions, ParametricFunctions>();
 builder.Services.AddScoped<IAIAssistantService, AIAssistantService>();
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -60,6 +72,9 @@ if (app.Environment.IsProduction())
 {
     app.UseHttpsRedirection();
 }
+
+// Use CORS
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
