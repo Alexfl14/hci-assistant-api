@@ -4,6 +4,17 @@ using Microsoft.Extensions.Options;
 using HCI.AIAssistant.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CORS",
+    policy =>
+    {
+        policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin();
+    });
+});
 
 var keyVaultName = builder.Configuration
   [$"AppConfigurations{ConfigurationPath.KeyDelimiter}KeyVaultName"];
@@ -74,7 +85,8 @@ if (app.Environment.IsProduction())
 }
 
 // Use CORS
-app.UseCors("AllowAll");
+
+app.UseCors("CORS");
 
 app.UseAuthorization();
 
